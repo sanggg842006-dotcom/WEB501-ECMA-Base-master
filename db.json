@@ -10,5 +10,12 @@
       "description": "Du thuyền vịnh Hạ Long - Kỳ quan thiên nhiên thế giới",
       "available": "20"
     }
+  ],
+  "users": [
+    {
+      "email": "sanggg842006@gmail.com",
+      "password": "$2a$10$Rqmeoho2vpcq8eYUE956NubbmjCFE6BE35pxsHrfR/YrGpwXx6L26",
+      "id": 1
+    }
   ]
 }

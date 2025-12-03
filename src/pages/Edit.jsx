@@ -118,7 +118,7 @@ function EditPage() {
         <select
           name="category"
           value={tour.category}
-onChange={handleChange}
+          onChange={handleChange}
           className="w-full border p-2 rounded"
         >
           <option value="tour nội địa">Tour nội địa</option>

@@ -98,7 +98,7 @@ function AddTourPage() {
         </div>
 
         <div>
-<label className="block font-medium mb-1">Còn lại</label>
+          <label className="block font-medium mb-1">Còn lại</label>
           <input
             type="number"
             value={available}

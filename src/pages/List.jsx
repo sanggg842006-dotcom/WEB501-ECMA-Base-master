@@ -85,7 +85,7 @@ function ListPage() {
                   <td className="px-4 py-2 border text-red-500 font-bold">
                     {tour.price.toLocaleString()}₫
                   </td>
-<td className="px-4 py-2 border">{tour.available}</td>
+                  <td className="px-4 py-2 border">{tour.available}</td>
                   <td className="px-4 py-2 border">
                     <button
                       onClick={() => handleDelete(tour.id)}
