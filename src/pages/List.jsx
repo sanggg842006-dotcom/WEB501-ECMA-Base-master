@@ -1,112 +1,123 @@
 import { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
 import axios from 'axios'
+import { toast } from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 
-export default function ListPage() {
-  const [tours, setTours] = useState([])
-  const [loading, setLoading] = useState(true)
+function ListPage() {
+  const [students, setStudents] = useState([])
 
   useEffect(() => {
-    ;(async () => {
+    const getStudents = async () => {
       try {
-        const { data } = await axios.get('http://localhost:3000/tours')
-        setTours(data)
-      } catch (e) {
-        toast.error(e?.response?.data?.message || e.message)
-      } finally {
-        setLoading(false)
+        const { data } = await axios.get('http://localhost:3000/sinh_vien')
+        setStudents(data || [])
+      } catch (error) {
+        console.log(error)
+        toast.error('Lỗi tải danh sách sinh viên')
       }
-    })()
+    }
+    getStudents()
   }, [])
 
   const handleDelete = async id => {
-    if (!confirm('Bạn muốn xoá tour này?')) return
+    if (!window.confirm('Bạn có chắc muốn xóa sinh viên này?')) return
+
     try {
-      await axios.delete(`http://localhost:3000/tours/${id}`)
-      setTours(prev => prev.filter(t => t.id !== id))
-      toast.success('Đã xoá')
-    } catch (e) {
-      toast.error(e?.response?.data?.message || e.message)
+      await axios.delete('http://localhost:3000/sinh_vien/' + id)
+      setStudents(prev => prev.filter(sv => sv.id !== id))
+      toast.success('Xóa thành công')
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message || 'Lỗi xóa sinh viên')
     }
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <div className="mx-auto max-w-5xl rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-        <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-xl font-semibold">Danh sách tour</h1>
-          <Link
-            to="/add"
-            className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-          >
-            + Thêm mới
-          </Link>
-        </div>
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-semibold">Danh sách sinh viên</h1>
+        <Link
+          to="/add"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          + Thêm
+        </Link>
+      </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full border-separate border-spacing-0 text-left text-sm">
-            <thead>
-              <tr className="text-slate-600">
-                <th className="border-b px-4 py-3">ID</th>
-                <th className="border-b px-4 py-3">Name</th>
-                <th className="border-b px-4 py-3">Price</th>
-                <th className="border-b px-4 py-3">Category</th>
-                <th className="border-b px-4 py-3 text-right">Actions</th>
+      <div className="overflow-x-auto">
+        <table className="w-full border border-gray-300 rounded-lg">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-4 py-2 border border-gray-300 text-left">#</th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Tên
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Tuổi
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Môn học
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Ngành học
+              </th>
+              <th className="px-4 py-2 border border-gray-300 text-left">
+                Actions
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {students.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={6}
+                  className="px-4 py-3 border border-gray-300 text-center"
+                >
+                  Chưa có sinh viên nào
+                </td>
               </tr>
-            </thead>
-
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td className="px-4 py-6 text-slate-500" colSpan={5}>
-                    Đang tải...
+            ) : (
+              students.map((sv, index) => (
+                <tr key={sv.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2 border border-gray-300">
+                    {index + 1}
                   </td>
-                </tr>
-              ) : tours.length === 0 ? (
-                <tr>
-                  <td className="px-4 py-6 text-slate-500" colSpan={5}>
-                    Chưa có tour nào.
+                  <td className="px-4 py-2 border border-gray-300">
+                    {sv.name}
                   </td>
-                </tr>
-              ) : (
-                tours.map(tour => (
-                  <tr key={tour.id} className="hover:bg-slate-50">
-                    <td className="border-b px-4 py-3">{tour.id}</td>
-                    <td className="border-b px-4 py-3 font-medium">{tour.name}</td>
-                    <td className="border-b px-4 py-3">
-                      {Number(tour.price || 0).toLocaleString('vi-VN')}₫
-                    </td>
-                    <td className="border-b px-4 py-3">{tour.category}</td>
-                    <td className="border-b px-4 py-3">
-                      <div className="flex justify-end gap-2">
-                        <Link
-                          to={`/edit/${tour.id}`}
-                          className="rounded-lg border px-3 py-1.5 text-sm hover:bg-white"
-                        >
+                  <td className="px-4 py-2 border border-gray-300">
+                    {sv.age}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {sv.mon_hoc}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    {sv.nganh_hoc}
+                  </td>
+                  <td className="px-4 py-2 border border-gray-300">
+                    <div className="flex gap-2">
+                      <Link to={`/edit/${sv.id}`}>
+                        <button className="px-3 py-1 text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600">
                           Edit
-                        </Link>
-                        <button
-                          onClick={() => handleDelete(tour.id)}
-                          className="rounded-lg bg-red-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-700"
-                        >
-                          Delete
                         </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(sv.id)}
+                        className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   )
 }
 
-
-
-
-
-
+export default ListPage

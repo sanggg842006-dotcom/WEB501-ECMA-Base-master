@@ -2,86 +2,127 @@ import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 
-export default function AddPage() {
+function AddPage() {
   const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
-  const [category, setCategory] = useState('Tour noi dia')
-  const [loading, setLoading] = useState(false)
+  const [age, setAge] = useState('')
+  const [monHoc, setMonHoc] = useState('')
+  const [nganhHoc, setNganhHoc] = useState('FE')
 
-  const handleSubmit = async e => {
-    e.preventDefault()
+  const handleSubmit = async event => {
+    event.preventDefault()
+
+    // VALIDATE
+    if (!name.trim() || !age || !monHoc.trim() || !nganhHoc) {
+      toast.error('Tất cả các trường là bắt buộc')
+      return
+    }
+
+    const ageNumber = Number(age)
+    if (Number.isNaN(ageNumber) || ageNumber <= 0) {
+      toast.error('Tuổi phải là số lớn hơn 0')
+      return
+    }
+
+    const allowedMajors = ['FE', 'BE', 'Mobile']
+    if (!allowedMajors.includes(nganhHoc)) {
+      toast.error('Ngành học phải là FE, BE hoặc Mobile')
+      return
+    }
+
     try {
-      setLoading(true)
-      await axios.post('http://localhost:3000/tours', {
+      await axios.post('http://localhost:3000/sinh_vien', {
         name: name.trim(),
-        price: Number(price),
-        category,
+        age: ageNumber,
+        mon_hoc: monHoc.trim(),
+        nganh_hoc: nganhHoc,
       })
-      toast.success('Thêm thành công')
+      toast.success('Thêm sinh viên thành công')
+
+      // reset form
       setName('')
-      setPrice('')
-      setCategory('Tour noi dia')
-    } catch (err) {
-      toast.error(err?.response?.data?.message || err.message)
-    } finally {
-      setLoading(false)
+      setAge('')
+      setMonHoc('')
+      setNganhHoc('FE')
+    } catch (error) {
+      toast.error(error.message)
     }
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <form
-        onSubmit={handleSubmit}
-        className="mx-auto max-w-lg space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
-      >
-        <h1 className="text-xl font-semibold">Thêm tour</h1>
+    <div className="p-6">
+      <h1 className="text-2xl font-semibold mb-6">Thêm sinh viên</h1>
 
-        <div className="space-y-1">
-          <label className="text-sm font-medium" htmlFor="name">Name</label>
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        {/* Name */}
+        <div>
+          <label htmlFor="name" className="block font-medium mb-1">
+            Tên sinh viên
+          </label>
           <input
-            id="name"
             value={name}
-            onChange={e => setName(e.target.value)}
-            className="w-full rounded-xl border px-4 py-2.5 outline-none focus:ring-4 focus:ring-blue-100"
-            placeholder="Tour Đà Lạt..."
-            required
+            onChange={event => setName(event.target.value)}
+            type="text"
+            id="name"
+            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        <div className="space-y-1">
-          <label className="text-sm font-medium" htmlFor="price">Price</label>
+        {/* Age */}
+        <div>
+          <label htmlFor="age" className="block font-medium mb-1">
+            Tuổi
+          </label>
           <input
-            id="price"
-            value={price}
-            onChange={e => setPrice(e.target.value)}
+            value={age}
+            onChange={event => setAge(event.target.value)}
             type="number"
+            id="age"
             min={1}
-            className="w-full rounded-xl border px-4 py-2.5 outline-none focus:ring-4 focus:ring-blue-100"
-            placeholder="1500000"
-            required
+            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        <div className="space-y-1">
-          <label className="text-sm font-medium" htmlFor="category">Category</label>
+        {/* Môn học */}
+        <div>
+          <label htmlFor="monHoc" className="block font-medium mb-1">
+            Môn học
+          </label>
+          <input
+            value={monHoc}
+            onChange={event => setMonHoc(event.target.value)}
+            type="text"
+            id="monHoc"
+            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        {/* Ngành học */}
+        <div>
+          <label htmlFor="selectOption" className="block font-medium mb-1">
+            Ngành học
+          </label>
           <select
-            id="category"
-            value={category}
-            onChange={e => setCategory(e.target.value)}
-            className="w-full rounded-xl border bg-white px-4 py-2.5 outline-none focus:ring-4 focus:ring-blue-100"
+            value={nganhHoc}
+            onChange={e => setNganhHoc(e.target.value)}
+            id="selectOption"
+            className="w-full border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="Tour noi dia">Tour nội địa</option>
-            <option value="Tour quoc te">Tour quốc tế</option>
+            <option value="FE">FE</option>
+            <option value="BE">BE</option>
+            <option value="Mobile">Mobile</option>
           </select>
         </div>
 
+        {/* Submit button */}
         <button
-          disabled={loading}
-          className="w-full rounded-xl bg-blue-600 py-2.5 font-semibold text-white disabled:opacity-60"
+          type="submit"
+          className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
         >
-          {loading ? 'Đang lưu...' : 'Submit'}
+          Submit
         </button>
       </form>
     </div>
   )
 }
+
+export default AddPage

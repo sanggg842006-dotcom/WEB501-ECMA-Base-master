@@ -1,38 +1,18 @@
 {
-  "tours": [
+  "sinh_vien": [
     {
-      "name": "Tour Cát Bà 2N1Đ",
-      "price": 3000000,
-      "category": "Tour noi dia",
+      "id": 2,
+      "name": "Trần Thị B",
+      "age": 22,
+      "mon_hoc": "Lập trình Backend",
+      "nganh_hoc": "BE"
+    },
+    {
+      "name": "Nguyen Van Sang",
+      "age": 19,
+      "mon_hoc": "PHP",
+      "nganh_hoc": "FE",
       "id": 3
-    },
-    {
-      "name": "Tour Hạ Long 3N2Đ",
-      "price": 5000000,
-      "category": "Tour noi dia",
-      "id": 4
-    }
-  ],
-  "users": [
-    {
-      "email": "sanggg842006@gmail.com",
-      "password": "$2a$10$Rqmeoho2vpcq8eYUE956NubbmjCFE6BE35pxsHrfR/YrGpwXx6L26",
-      "id": 1
-    },
-    {
-      "email": "abcd42006@gmail.com",
-      "password": "$2a$10$prK3W2MRPWFg5VIRJPgLcut7Nsr.nsVclFLboZdtL1FysFa5SBTJ6",
-      "id": 2
-    },
-    {
-      "email": "qtrung123@gmail.com",
-      "password": "$2a$10$QXOPWwAA4JlO8epgdfpzPuw4WnC.sbmp7zCvPUtsK5IYfwu5NGFFu",
-      "id": 3
-    },
-    {
-      "email": "tkhoa2005@gmail.com",
-      "password": "$2a$10$h86Nt8e/PB3UaaG8CCE11.x.l5tSXQfn1h0XUYh440an0d5p/x3vK",
-      "id": 4
     }
   ]
 }
